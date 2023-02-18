@@ -30,6 +30,10 @@ button:hover {
     color: black;
 }
 
+#questions {
+    display: none;
+}
+
 #end-screen {
     display: none;
 }

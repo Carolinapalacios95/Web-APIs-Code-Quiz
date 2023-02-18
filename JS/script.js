@@ -3,6 +3,12 @@ var startButton = document.querySelector("#start-button");
 var endScreenEl = document.getElementById("end-screen");
 var questionsEl = document.querySelector('#questions');
 
+//quiz timer variables 
+//(I chose 12 because their are 5 questions and 5 * 12 = 60 sec,
+//and in the html I stated the quiz would be 60 sec long)
+//var time = questionsArray.length * 12;
+
+
 //this declares startQuiz function
 function startQuiz() {
   // creates a variable that references the start screen div by its ID
@@ -44,8 +50,32 @@ function getQuestion() {
 
   //declares a new var that references the div with and ID of choices
   var choicesEl = document.querySelector("#choices");
+
   //clears out any old question choices by setting them to an empty string
   choicesEl.innerHTML = "";
+
+  var choicesArray = currentQuestion.choices;
+
+  var createChoices = function() {
+    for (var i = 0; i < choicesArray.length; i++) {
+
+      var choice = choicesArray[i];
+     
+      var choiceButton = document.createElement("button");
+      choiceButton.setAttribute("class", "choice");
+      choiceButton.setAttribute("value", choice);
+
+     choiceButton.textContent = i + 1 + ". " + choice;
+
+      //currentChoice.addEventListener("click", questionClick);
+
+      choicesEl.appendChild(choiceButton);
+    };
+  }
+
+  createChoices();
+
+  
 }
 
 
