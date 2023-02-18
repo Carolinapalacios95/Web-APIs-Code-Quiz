@@ -18,16 +18,68 @@ function startQuiz() {
       // switches its style to none, hiding it on the webpage and 
       // then switches our questions div to block, making it appear on the page
       startScreenEl.style.display = "none";
-      
+      questionsEl.style.display = "block";
+      //calls function to display questions
+      getQuestion();
+    }
     // still need to add timer components
-  }
 }
-
 
 // starts quiz by calling function when start button is clicked
 startButton.addEventListener("click", startQuiz);
 
 
+function getQuestion() {
+  //sets the initial question index to 0
+  var currentQuestionIndex = 0;
+
+  //gets current question object from array
+  var currentQuestion = questionsArray[currentQuestionIndex];
+
+  //creates a new var that references the h2 tag in questions div
+  var titleEl = document.getElementById("question-title");
+  //sets the text content of var to the first question in questions 
+  // array by sepcifically referring to .question property with array
+  titleEl.textContent = currentQuestion.question;
+
+  //declares a new var that references the div with and ID of choices
+  var choicesEl = document.querySelector("#choices");
+  //clears out any old question choices by setting them to an empty string
+  choicesEl.innerHTML = "";
+}
+
+
+
+
+// QUESTIONS SECTION
+
+var questionsArray = [
+  {
+    question: "Which of these computer programming languages is used to build the structure of a webpage?",
+    choices: ["Javascript", "CSS", "HTML", "Git"],
+    answer: "HTML"
+  },
+  {
+    question: "Which of these is not one of the 3 ways to style a webpage using CSS?",
+    choices: ["automatic CSS", "internal CSS", "inline CSS", "external CSS"],
+    answer: "automatic CSS"
+  },
+  {
+    question: "A(n) (fill in the blank), is a set of instructions that tells the computer how to perform a certain task",
+    choices: ["array", "variable", "string", "function"],
+    answer: "function"
+  },
+  {
+    question: "The header element of an HTML page is located within which of the following?",
+    choices: ["head tag", "body tag", "main tag", "footer tag"],
+    answer: "body tag"
+  },
+  {
+    question: "If we reach a roadblock when coding, what is the one thing we should NOT do?",
+    choices: ["inspect our webpage using Devtools", "go through our lines of code looking for spelling/syntax errors", "look up resources on how to debug the issue", "give up and wallow in self-pity"],
+    answer: "give up and wallow in self-pity"
+  }
+];
 
 
 
