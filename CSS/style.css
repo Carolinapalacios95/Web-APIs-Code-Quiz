@@ -17,7 +17,7 @@ button {
     cursor: pointer;
     font-family:Georgia, 'Times New Roman', Times, serif;
     font-size:100%;
-    background-color: rgb(46, 150, 150);
+    background-color: rgb(171, 60, 175);
     border-radius: 5px;
     padding: 3px 10px;
     color: white;
@@ -37,3 +37,12 @@ button:hover {
 #end-screen {
     display: none;
 }
+
+#feedback {
+    font-style: italic;
+    font-size: 120%;
+    margin-top: 20px;
+    padding-top: 10px;
+    color: gray;
+    border-top: 2px solid rgb(201, 193, 193);
+  }

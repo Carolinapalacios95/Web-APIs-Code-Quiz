@@ -1,13 +1,32 @@
+// ************************** GLOBAL VARIABLE DECLARATIONS ****************************************
+
 //gets html elements and renames them as variables we can reference thoughout js sheet
 var startButton = document.querySelector("#start-button");
 var endScreenEl = document.getElementById("end-screen");
 var questionsEl = document.querySelector('#questions');
+var timerEl = document.querySelector("#time");
+var feedbackEl = document.querySelector("#feedback");
 
 //quiz timer variables 
 //(I chose 12 because their are 5 questions and 5 * 12 = 60 sec,
 //and in the html I stated the quiz would be 60 sec long)
-//var time = questionsArray.length * 12;
+var time = 60;
+var timerId;
+var currentQuestionIndex = 0;
 
+// ************************ NEW FUNCTION **************************************************************
+function clockTick() {
+  // Countsdown the timer
+  time--;
+  timerEl.textContent = time;
+
+  // check if user ran out of time
+  // if (time <= 0) {
+  //   quizEnd();
+  // }
+}
+
+// *************************** NEW FUNCTION *******************************************************
 
 //this declares startQuiz function
 function startQuiz() {
@@ -25,19 +44,30 @@ function startQuiz() {
       // then switches our questions div to block, making it appear on the page
       startScreenEl.style.display = "none";
       questionsEl.style.display = "block";
+
+      // start timer
+    timerId = setInterval(clockTick, 1000);
+
+    // show starting time
+    timerEl.textContent = time;
+
       //calls function to display questions
       getQuestion();
     }
-    // still need to add timer components
+    
+
 }
 
 // starts quiz by calling function when start button is clicked
 startButton.addEventListener("click", startQuiz);
 
 
+// ****************************** NEW FUNCTION ***********************************************
+
+//declares the getQuestion function
 function getQuestion() {
-  //sets the initial question index to 0
-  var currentQuestionIndex = 0;
+  // //sets the initial question index to 0
+  // var currentQuestionIndex = 0;
 
   //gets current question object from array
   var currentQuestion = questionsArray[currentQuestionIndex];
@@ -54,34 +84,91 @@ function getQuestion() {
   //clears out any old question choices by setting them to an empty string
   choicesEl.innerHTML = "";
 
+  // creates a var that holds the array for choices, found within the questions array
   var choicesArray = currentQuestion.choices;
 
-  var createChoices = function() {
-    for (var i = 0; i < choicesArray.length; i++) {
+  // creates a function that loops through the choices array
+  var displayChoices = function() {
+    for (var currentQuestionIndex = 0; currentQuestionIndex < choicesArray.length; currentQuestionIndex++) {
 
-      var choice = choicesArray[i];
+      // creates a var for the current choice in the array that the function is affecting
+      var choice = choicesArray[currentQuestionIndex];
      
+      //creates a var for a new button element created in html
       var choiceButton = document.createElement("button");
+      //sets attributes to the newly created button
       choiceButton.setAttribute("class", "choice");
+      //sets the value button to the current choice that the function is dealing with
       choiceButton.setAttribute("value", choice);
 
-     choiceButton.textContent = i + 1 + ". " + choice;
+      //sets the button text content to the current index of the array plus 1, and beside it, 
+      // the text of the current choice that the function is dealing with
+      choiceButton.textContent = currentQuestionIndex + 1 + ". " + choice;
 
-      //currentChoice.addEventListener("click", questionClick);
+      choiceButton.addEventListener("click", questionClick);
 
+      //appended the button within the choices div as a child element
       choicesEl.appendChild(choiceButton);
     };
   }
-
-  createChoices();
-
-  
+  //calls the function since we've only declared it above
+   displayChoices();
 }
 
 
 
+ // *********************************** NEW FUNCTION ************************************************
 
-// QUESTIONS SECTION
+ function questionClick() {
+   //sets the initial question index to 0
+  //  var currentQuestionIndex = 0;
+
+   //checks if the user guessed wrong
+   if (this.value !== questionsArray[currentQuestionIndex].answer) {
+     //penalize time
+     time -= 15;
+
+     if (time < 0) {
+       time = 0;
+     }
+
+      //displays the new time on page
+      timerEl.textContent = time;
+      feedbackEl.textContent = "Wrong answer!";
+      feedbackEl.style.color = "red";
+      feedbackEl.style.fontSize = "200%";
+     } else {
+      feedbackEl.textContent = "Correct!";
+      feedbackEl.style.color = "green";
+      feedbackEl.style.fontSize = "200%";
+     };
+
+     // flash right/ wrong feedback
+//     feedbackEl.style.display = "block";
+//     setTimeout(function() {
+//     feedbackEl.style.display = "none";
+//     }, 1000);
+
+     //go to next question
+    currentQuestionIndex++;
+
+    // //time checker
+    //  if (currentQuestionIndex === questionsArray.length) {
+    //    endQuiz();
+    //  } else {
+    //    getQuestion();
+    //  };
+};
+ 
+// ********************************* NEW FUNCTION ******************************************
+
+
+
+
+
+
+
+// *********************************** QUESTIONS SECTION **********************************************
 
 var questionsArray = [
   {
@@ -109,12 +196,4 @@ var questionsArray = [
     choices: ["inspect our webpage using Devtools", "go through our lines of code looking for spelling/syntax errors", "look up resources on how to debug the issue", "give up and wallow in self-pity"],
     answer: "give up and wallow in self-pity"
   }
-];
-
-
-
-
-
-
-
-    
+]
