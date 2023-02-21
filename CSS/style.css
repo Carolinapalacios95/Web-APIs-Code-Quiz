@@ -46,3 +46,28 @@ button:hover {
     color: gray;
     border-top: 2px solid rgb(201, 193, 193);
   }
+
+  .scores {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .choices button {
+    display: block;
+  }
+  
+  input[type="text"] {
+    font-size: 100%;
+  }
+  
+  ol {
+    padding-left: 0px;
+    max-height: 400px;
+    overflow: auto;
+  }
+  
+  li {
+    padding: 5px;
+    list-style: decimal inside none;
+  }

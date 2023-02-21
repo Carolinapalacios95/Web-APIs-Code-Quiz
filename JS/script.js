@@ -1,15 +1,18 @@
 // ************************** GLOBAL VARIABLE DECLARATIONS ****************************************
 
 //gets html elements and renames them as variables we can reference thoughout js sheet
-var startButton = document.querySelector("#start-button");
-var endScreenEl = document.getElementById("end-screen");
-var questionsEl = document.querySelector('#questions');
 var timerEl = document.querySelector("#time");
+var startButton = document.querySelector("#start-button");
+var questionsEl = document.querySelector('#questions');
+var endScreenEl = document.getElementById("end-screen");
 var feedbackEl = document.querySelector("#feedback");
+var initialsEl = document.querySelector("#initials");
+var submitButton = document.querySelector("#submit");
+var scoresEl = document.querySelector("#scores");
+var highscores = JSON.parse(window.localStorage.getItem("highscores"));
+
 
 //quiz timer variables 
-//(I chose 12 because their are 5 questions and 5 * 12 = 60 sec,
-//and in the html I stated the quiz would be 60 sec long)
 var time = 60;
 var timerId;
 var currentQuestionIndex = 0;
@@ -21,10 +24,14 @@ function clockTick() {
   timerEl.textContent = time;
 
   // check if user ran out of time
-  // if (time <= 0) {
-  //   quizEnd();
-  // }
+  if (time <= 0) {
+    quizEnd();
+  }
 }
+
+
+// starts quiz by calling function when start button is clicked
+startButton.addEventListener("click", startQuiz);
 
 // *************************** NEW FUNCTION *******************************************************
 
@@ -54,12 +61,7 @@ function startQuiz() {
       //calls function to display questions
       getQuestion();
     }
-    
-
 }
-
-// starts quiz by calling function when start button is clicked
-startButton.addEventListener("click", startQuiz);
 
 
 // ****************************** NEW FUNCTION ***********************************************
@@ -116,7 +118,6 @@ function getQuestion() {
 }
 
 
-
  // *********************************** NEW FUNCTION ************************************************
 
  function questionClick() {
@@ -134,6 +135,7 @@ function getQuestion() {
 
       //displays the new time on page
       timerEl.textContent = time;
+      //styles the feedback text
       feedbackEl.textContent = "Wrong answer!";
       feedbackEl.style.color = "red";
       feedbackEl.style.fontSize = "200%";
@@ -149,21 +151,107 @@ function getQuestion() {
 //     feedbackEl.style.display = "none";
 //     }, 1000);
 
-     //go to next question
+     //will go to next question if the following if statement calls getQuestion
     currentQuestionIndex++;
 
-    // //time checker
-    //  if (currentQuestionIndex === questionsArray.length) {
-    //    endQuiz();
-    //  } else {
-    //    getQuestion();
-    //  };
+    //time checker
+     if (currentQuestionIndex === questionsArray.length || time <= 0) {
+       endQuiz();
+     } else {
+       getQuestion();
+     };
 };
  
 // ********************************* NEW FUNCTION ******************************************
 
+function endQuiz() {
+  // stops timer
+  clearInterval(timerId);
+
+  //hides the questions div
+  questionsEl.style.display = "none";
+  feedbackEl.style.display = "none";
+
+  // shows end screen div
+  endScreenEl.style.display = "block";
+
+  // creates var that references the span tag
+  var finalScoreEl = document.getElementById("final-score");
+  //shows the final score
+  finalScoreEl.textContent = time;
+}
 
 
+// ************************************ NEW FUNCTION **********************************************
+function checkForEnter(event) {
+  // "13" represents the enter key
+  if (event.key === "Enter") {
+    saveHighscore();
+  }
+}
+initialsEl.onkeyup = checkForEnter;
+
+ // submit initials
+ submitButton.addEventListener("click", saveHighscore);
+
+function saveHighscore() {
+  //gets the value from the input box
+  var initials = initialsEl.value.trim();
+  
+
+  if (initials !== "") {
+    endScreenEl.style.display = "none";
+    scoresEl.style.display = "block";
+
+    // get saved scores from localstorage, or if not any, set to empty array
+    var highscores = JSON.parse(window.localStorage.getItem("highscores")) || [];
+
+   // formats new score object for current user
+   var newScore = {
+    score: time,
+    initials: initials
+  }; 
+
+   // saves to localstorage
+   highscores.push(newScore);
+   window.localStorage.setItem("highscores", JSON.stringify(highscores));
+
+   //calls the print high scores function
+   printHighscores();
+  }
+}
+// ************************************ NEW FUNCTION **********************************************
+
+function printHighscores() {
+   // either get scores from localstorage or set to empty array
+   JSON.parse(window.localStorage.getItem("highscores")) || [];
+
+
+  // sort highscores by score property in descending order
+  highscores.sort(function(a, b) {
+    return b.score - a.score;
+  });
+
+ 
+  highscores.forEach(function(score) {
+    // create li tag for each high score
+    var liTag = document.createElement("li");
+    liTag.textContent = score.initials + " - " + score.score;
+
+    // display on page
+    var olEl = document.getElementById("highscores");
+    olEl.appendChild(liTag);
+  });
+}
+
+// ************************************ NEW FUNCTION **********************************************
+
+document.getElementById("clear").onclick = clearHighscores;
+
+function clearHighscores() {
+  window.localStorage.removeItem("highscores");
+  window.location.reload();
+}
 
 
 

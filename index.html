@@ -10,34 +10,40 @@
 </head>
 
 <body>
-    <!-- Need to add scores div -->
-
     <div class="timer">Time: <span id= "time">0</span></div>
 
     <div class="container">
-        <div id="start-screen" class="start">
+        <div id="start-screen">
             <h1>Coding Quiz Challenge</h1>
             <p>
                 Click start when you are ready to begin your Coding Quiz Challenge! <br>
                 You have 60 seconds to answer as many questions as you can before the timer runs out! <br>
-                Remember, if you answer incorrectly, 5 seconds will be knocked off the timer! <br>
+                Remember, if you answer incorrectly, 15 seconds will be knocked off the timer! <br>
                 Goodluck!
             </p>
             <button id="start-button">Start Quiz</button>
         </div>
 
-        <div id="questions">
+        <div id="questions" style="display: none">
             <h2 id="question-title"></h2>
             <div id="choices" class="choices"></div>
         </div>
 
-        <div id="end-screen" class="hide">
+        <div id="end-screen" style="display: none">
             <h2>All done!</h2>
             <p>Your final score is <span id="final-score"></span>.</p>
             <p>
               Enter initials: <input type="text" id="initials" max="3" />
               <button id="submit">Submit</button>
             </p>
+        </div>
+
+        <div id="scores" style="display: none">
+            <h1>Highscores</h1>
+            <ol id="highscores"></ol>
+      
+            <a href="index.html"><button>Go Back</button></a>
+            <button id="clear">Clear Highscores</button>
         </div>
           
         <div id="feedback" class="feedback hide"></div>
